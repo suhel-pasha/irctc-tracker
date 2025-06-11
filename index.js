@@ -50,16 +50,17 @@ const getSeats = async (dateString) => {
 
   await page.waitForSelector(selector);
 
-  const text1 = await page.$eval(selector, el => el.textContent.trim());
-  
+  let text1 = await page.$eval(selector, el => el.textContent.trim());
+  text1 = text1.substring(text1.indexOf("(SL)"));
 
   await page.goto(`https://www.redbus.in/railways/travellerInfo?src=SMET&dst=SBC&doj=${date}&reDoj=&trainNo=12090&cls=2S&q=GN&train=Janshatabdi%20Exp&index=1&avlS=Available&avlNo=1163&isRE=0&isCluster=0&isAltDoj=0&realSrc=&realSrcName=&realDst=&realDstName=&dDate=&dTime=&aDate=&aTime=&didPopUp=0&isFc=true&fcOpted=false`);
 
   await page.waitForSelector(selector);
 
-  const text2 = await page.$eval(selector, el => el.textContent.trim());
+  let text2 = await page.$eval(selector, el => el.textContent.trim());
+  text2 = text2.substring(text2.indexOf("(2S)"));
   await browser.close();
-  return `${dateString}: ${text2.padEnd(34, ' ')} ${(bookingStatus[dateString]?.[0]? '(Booked)': '(Not booked)').padEnd(12, ' ')} ${text1.padEnd(26, ' ')} (${(bookingStatus[dateString]?.[1]? 'Booked': 'Not booked')})`;
+  return `${dateString}: ${text2.padEnd(0, ' ')}${(bookingStatus[dateString]?.[0]? '(Booked)': '(Not booked)').padEnd(0, ' ')} ${text1.padEnd(0, ' ')}(${(bookingStatus[dateString]?.[1]? 'Booked': 'Not booked')})`;
 
 };
 
